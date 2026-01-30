@@ -418,12 +418,11 @@
                     return rarityMatch && typeMatch && baseAttributeMatch && additionalAttributeMatch && skillAttributeMatch;
                 });
                 
-                // 清空当前选择
-                selectedWeaponIds = [];
-                
-                // 添加筛选后的所有武器
+                // 添加筛选后的所有武器（保留之前已选择的武器）
                 filteredWeapons.forEach(weapon => {
-                    selectedWeaponIds.push(weapon.id);
+                    if (!selectedWeaponIds.includes(weapon.id)) {
+                        selectedWeaponIds.push(weapon.id);
+                    }
                 });
                 
                 // 重新渲染武器选择列表
