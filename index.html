@@ -311,13 +311,8 @@
         function initializeMainWeaponSelector() {
             const mainWeaponSelect = document.getElementById('main-weapon-select');
             
-            // 按稀有度和名称排序武器
-            const sortedWeapons = [...weapons].sort((a, b) => {
-                if (a.rarity !== b.rarity) {
-                    return b.rarity - a.rarity; // 6星在前，5星在后
-                }
-                return a.name.localeCompare(b.name);
-            });
+            // 按照原始顺序排序武器
+            const sortedWeapons = [...weapons];
             
             // 填充主刷武器选择器
             sortedWeapons.forEach(weapon => {
@@ -330,6 +325,16 @@
             // 绑定主刷武器选择事件
             mainWeaponSelect.addEventListener('change', function() {
                 mainWeaponId = this.value ? parseInt(this.value) : null;
+                
+                // 如果选择了主刷武器，自动在下方选择对应的武器
+                if (mainWeaponId) {
+                    // 确保该武器ID在selectedWeaponIds中
+                    if (!selectedWeaponIds.includes(mainWeaponId)) {
+                        selectedWeaponIds.push(mainWeaponId);
+                        // 重新渲染武器选择列表以更新复选框状态
+                        renderWeaponSelection();
+                    }
+                }
             });
         }
 
@@ -542,7 +547,7 @@
         const attributeNameMap = {
             "终结技充能效率提升": "终结技效率提升",
             "源石技艺强度提升": "源石技艺提升",
-            "法术伤害提升": "法术提升"
+            "法术提升": "法术伤害提升"
         };
 
         // 获取标准化的属性名称
